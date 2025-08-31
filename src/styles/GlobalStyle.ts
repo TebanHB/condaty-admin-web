@@ -3,9 +3,8 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
-  /*
-   * 1. Un reseteo de CSS básico y sensato.
-   */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
   *, *::before, *::after {
     box-sizing: border-box;
   }
@@ -20,9 +19,6 @@ const GlobalStyle = createGlobalStyle`
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /*
-   * 2. Otros estilos globales que quieras añadir.
-   */
   a {
     color: inherit;
     text-decoration: none;

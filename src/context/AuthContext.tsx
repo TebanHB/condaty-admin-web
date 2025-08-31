@@ -1,15 +1,17 @@
+// src/context/AuthContext.tsx
 'use client';
+
 import {
     createContext,
     useState,
     useContext,
     ReactNode,
     useCallback,
-    useMemo
+    useMemo,
+    useEffect
 } from 'react';
 import { useRouter } from 'next/navigation';
 
-// 1. Define la estructura de los datos que manejará el contexto
 interface User {
     email: string;
     role: string;
@@ -17,17 +19,37 @@ interface User {
 
 interface AuthContextType {
     user: User | null;
+    loading: boolean;
     login: (email: string, password: string) => Promise<void>;
-    logout: () => void;
+    logout: () => Promise<void>; // Lo hacemos asíncrono
 }
 
-// 2. Crea el Contexto
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 3. Crea el Componente "Proveedor"
 export function AuthProvider({ children }: { readonly children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
+
+    useEffect(() => {
+        const verifyUser = async () => {
+            try {
+                const response = await fetch('/api/auth/verify');
+                if (response.ok) {
+                    const userData = await response.json();
+                    setUser(userData);
+                } else {
+                    setUser(null);
+                }
+            } catch (error) {
+                setUser(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        verifyUser();
+    }, []);
 
     const login = useCallback(async (email: string, password: string) => {
         try {
@@ -50,17 +72,26 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
         }
     }, [router]);
 
-    const logout = useCallback(() => {
-        // Aquí iría la llamada a una API de logout que invalide la cookie
-        setUser(null);
-        router.push('/login');
+    // --- FUNCIÓN LOGOUT ACTUALIZADA ---
+    const logout = useCallback(async () => {
+        try {
+            // 1. Llama a la API para destruir la cookie
+            await fetch('/api/auth/logout', { method: 'POST' });
+        } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+        } finally {
+            // 2. Limpia el estado y redirige sin importar el resultado de la API
+            setUser(null);
+            router.push('/login');
+        }
     }, [router]);
 
     const contextValue = useMemo(() => ({
         user,
+        loading,
         login,
         logout
-    }), [user, login, logout]);
+    }), [user, loading, login, logout]);
 
     return (
         <AuthContext.Provider value={contextValue}>
@@ -69,7 +100,6 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
     );
 }
 
-// 4. Crea un Hook personalizado para consumir el contexto fácilmente
 export function useAuth() {
     const context = useContext(AuthContext);
     if (context === undefined) {
