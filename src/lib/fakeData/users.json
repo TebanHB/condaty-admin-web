@@ -1,0 +1,5 @@
+[
+  { "email": "admin@admin.com", "password": "12345678", "role": "admin" },
+  { "email": "guardia@guardia.com", "password": "12345678", "role": "guard" },
+  { "email": "cliente@cliente.com", "password": "12345678", "role": "resident" }
+]
