@@ -1,6 +1,4 @@
-// src/context/AuthContext.tsx
 'use client';
-
 import {
     createContext,
     useState,
@@ -11,18 +9,7 @@ import {
     useEffect
 } from 'react';
 import { useRouter } from 'next/navigation';
-
-interface User {
-    email: string;
-    role: string;
-}
-
-interface AuthContextType {
-    user: User | null;
-    loading: boolean;
-    login: (email: string, password: string) => Promise<void>;
-    logout: () => Promise<void>; // Lo hacemos asíncrono
-}
+import { User, AuthContextType } from '@/types/auth';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -42,6 +29,7 @@ export function AuthProvider({ children }: { readonly children: ReactNode }) {
                     setUser(null);
                 }
             } catch (error) {
+                console.error('Error verifying user:', error);
                 setUser(null);
             } finally {
                 setLoading(false);

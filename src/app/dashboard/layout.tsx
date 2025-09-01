@@ -6,8 +6,9 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import Image from 'next/image';
+import Link from 'next/link'; // <-- 1. Importamos el componente Link
 
-// --- Estilos Inspirados en Condaty.com ---
+// --- Estilos ---
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -25,6 +26,33 @@ const Header = styled.header`
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 10;
+`;
+
+// Nuevo: Contenedor para agrupar Logo y Navegación
+const HeaderPrimary = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 40px;
+`;
+
+// Nuevo: Contenedor para los enlaces de navegación
+const NavLinks = styled.nav`
+  display: flex;
+  gap: 20px;
+`;
+
+// Nuevo: Estilo para cada enlace de navegación
+const NavLink = styled(Link)`
+  color: ${({ theme }) => theme.colors.secondaryBlack};
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.2s, color 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.thirdBlack};
+    color: ${({ theme }) => theme.colors.primaryWhite};
+  }
 `;
 
 const UserInfo = styled.div`
@@ -55,39 +83,48 @@ const MainContent = styled.main`
 
 // --- Componente del Layout ---
 export default function DashboardLayout({
-    children,
+  children,
 }: {
-    readonly children: React.ReactNode;
+  readonly children: React.ReactNode;
 }) {
-    const { user, loading, logout } = useAuth();
-    const router = useRouter();
+  const { user, loading, logout } = useAuth();
+  const router = useRouter();
 
-    useEffect(() => {
-        if (!loading && user === null) {
-            router.push('/login');
-        }
-    }, [user, loading, router]);
-
-    if (loading || !user) {
-        return null; // O un spinner de carga para una mejor UX
+  useEffect(() => {
+    if (!loading && user === null) {
+      router.push('/login');
     }
+  }, [user, loading, router]);
 
-    return (
-        <DashboardContainer>
-            <Header>
-                <Image
-                    src="/Logo-oficial-blanco.png"
-                    alt="Logo de Condaty"
-                    width={150}
-                    height={35}
-                    priority
-                />
-                <UserInfo>
-                    <span>Bienvenido, {user.email}</span>
-                    <LogoutButton onClick={logout}>Cerrar Sesión</LogoutButton>
-                </UserInfo>
-            </Header>
-            <MainContent>{children}</MainContent>
-        </DashboardContainer>
-    );
+  if (loading || !user) {
+    return null;
+  }
+
+  return (
+    <DashboardContainer>
+      <Header>
+        <HeaderPrimary>
+          <Link href="/dashboard">
+            <Image
+              src="/Logo-oficial-blanco.png"
+              alt="Logo de Condaty"
+              width={150}
+              height={35}
+              priority
+            />
+          </Link>
+          {/* 2. Añadimos la sección de navegación */}
+          <NavLinks>
+            <NavLink href="/dashboard/surveys">Encuestas</NavLink>
+            {/* Aquí podrías añadir más enlaces en el futuro */}
+          </NavLinks>
+        </HeaderPrimary>
+        <UserInfo>
+          <span>Bienvenido, {user.email}</span>
+          <LogoutButton onClick={logout}>Cerrar Sesión</LogoutButton>
+        </UserInfo>
+      </Header>
+      <MainContent>{children}</MainContent>
+    </DashboardContainer>
+  );
 }

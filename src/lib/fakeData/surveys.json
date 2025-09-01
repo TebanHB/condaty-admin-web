@@ -1,0 +1,144 @@
+[
+  {
+    "id": "survey-001",
+    "title": "Satisfacción de Áreas Comunes",
+    "description": "Queremos conocer tu opinión sobre las áreas comunes para realizar mejoras.",
+    "status": "active",
+    "targetAudience": [
+      "resident",
+      "admin"
+    ],
+    "createdAt": "2025-08-28T10:00:00Z",
+    "questions": [
+      {
+        "id": "q-001",
+        "text": "¿Qué tan satisfecho estás con la limpieza de la piscina?",
+        "type": "single_choice",
+        "options": [
+          "Muy Satisfecho",
+          "Satisfecho",
+          "Neutral",
+          "Insatisfecho"
+        ]
+      },
+      {
+        "id": "q-002",
+        "text": "¿Qué nuevas áreas te gustaría ver?",
+        "type": "multiple_choice",
+        "options": [
+          "Gimnasio más equipado",
+          "Área de coworking",
+          "Parque para mascotas"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "survey-002",
+    "title": "Seguridad en el Condominio",
+    "description": "Evaluación trimestral del desempeño del equipo de seguridad y protocolos.",
+    "status": "closed",
+    "targetAudience": [
+      "resident",
+      "guard"
+    ],
+    "createdAt": "2025-07-15T10:00:00Z",
+    "questions": [
+      {
+        "id": "q-201",
+        "text": "En una escala del 1 al 5, ¿qué tan seguro te sientes en el condominio?",
+        "type": "single_choice",
+        "options": [
+          "1 (Inseguro)",
+          "2",
+          "3 (Neutral)",
+          "4",
+          "5 (Muy Seguro)"
+        ]
+      },
+      {
+        "id": "q-202",
+        "text": "Sugerencias para el equipo de seguridad.",
+        "type": "open_text",
+        "options": []
+      }
+    ]
+  },
+  {
+    "id": "survey-003",
+    "title": "Planificación Evento de Fin de Año",
+    "description": "Borrador de encuesta para decidir las actividades del evento de fin de año.",
+    "status": "draft",
+    "targetAudience": [
+      "admin"
+    ],
+    "createdAt": "2025-09-01T10:00:00Z",
+    "questions": []
+  },
+  {
+    "id": "survey-1756768332276",
+    "title": "Prueba",
+    "description": "Test",
+    "questions": [
+      {
+        "id": "q-1756768321805",
+        "text": "Pregunta 1",
+        "type": "open_text",
+        "options": []
+      }
+    ],
+    "status": "active",
+    "createdAt": "2025-09-01T23:12:12.276Z",
+    "targetAudience": []
+  },
+  {
+    "id": "survey-1756768355804",
+    "title": "Test 2",
+    "description": "Test",
+    "questions": [
+      {
+        "id": "q-1756768350330",
+        "text": "Test",
+        "type": "open_text",
+        "options": []
+      }
+    ],
+    "status": "draft",
+    "createdAt": "2025-09-01T23:12:35.804Z",
+    "targetAudience": []
+  },
+  {
+    "id": "survey-1756768418555",
+    "title": "Otra prueba",
+    "description": "Prueba rapida",
+    "questions": [
+      {
+        "id": "q-1756768401172",
+        "text": "Opciones",
+        "type": "single_choice",
+        "options": [
+          "Nueva Opción"
+        ]
+      }
+    ],
+    "status": "active",
+    "createdAt": "2025-09-01T23:13:38.555Z",
+    "targetAudience": []
+  },
+  {
+    "id": "survey-1756768453040",
+    "title": "Otra prueba",
+    "description": "Test",
+    "questions": [
+      {
+        "id": "q-1756768437810",
+        "text": "Opciones",
+        "type": "open_text",
+        "options": []
+      }
+    ],
+    "status": "draft",
+    "createdAt": "2025-09-01T23:14:13.040Z",
+    "targetAudience": []
+  }
+]
