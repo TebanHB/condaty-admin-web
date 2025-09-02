@@ -15,4 +15,5 @@ export interface Survey {
     type: string;
     options: string[];
   }[];
+  responseCount?: number;
 }

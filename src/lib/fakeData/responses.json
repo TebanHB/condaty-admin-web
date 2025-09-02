@@ -1,0 +1,87 @@
+[
+    {
+        "responseId": "resp-001",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-08-29T14:30:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Gimnasio más equipado",
+                    "Parque para mascotas"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-002",
+        "surveyId": "survey-001",
+        "userEmail": "admin@admin.com",
+        "submittedAt": "2025-08-29T18:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Muy Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Área de coworking"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-003",
+        "surveyId": "survey-002",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-07-20T09:15:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "4"
+            },
+            {
+                "questionId": "q-202",
+                "value": "El guardia nocturno es muy atento y siempre está haciendo rondas. Me siento seguro."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-004",
+        "surveyId": "survey-002",
+        "userEmail": "guardia@guardia.com",
+        "submittedAt": "2025-07-21T11:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "5 (Muy Seguro)"
+            },
+            {
+                "questionId": "q-202",
+                "value": "Necesitamos mejor iluminación en el perímetro trasero."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-005",
+        "surveyId": "survey-002",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-07-22T16:45:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "4"
+            },
+            {
+                "questionId": "q-202",
+                "value": ""
+            }
+        ]
+    }
+]
