@@ -17,3 +17,20 @@ export interface Survey {
   }[];
   responseCount?: number;
 }
+
+export interface SurveyResponse {
+  responseId: string;
+  surveyId: string;
+  userEmail: string;
+  submittedAt: string;
+  answers: {
+    questionId: string;
+    value: string | string[];
+  }[];
+}
+
+// Define la estructura de los datos que esperamos de la API de resultados.
+export interface SurveyResults {
+  survey: Survey;
+  responses: SurveyResponse[];
+}

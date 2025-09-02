@@ -83,5 +83,194 @@
                 "value": ""
             }
         ]
+    },
+    {
+        "responseId": "resp-006",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-08-30T10:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Neutral"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Gimnasio más equipado"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-007",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-08-30T11:20:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Parque para mascotas"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-008",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-08-30T15:05:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Insatisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Gimnasio más equipado",
+                    "Área de coworking"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-009",
+        "surveyId": "survey-001",
+        "userEmail": "admin@admin.com",
+        "submittedAt": "2025-08-31T09:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Muy Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Área de coworking"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-010",
+        "surveyId": "survey-002",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-07-23T10:10:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "3 (Neutral)"
+            },
+            {
+                "questionId": "q-202",
+                "value": "A veces no se controla bien el ingreso de los deliverys."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-011",
+        "surveyId": "survey-002",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-07-23T12:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "5 (Muy Seguro)"
+            },
+            {
+                "questionId": "q-202",
+                "value": "Todo perfecto, gran trabajo."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-012",
+        "surveyId": "survey-002",
+        "userEmail": "guardia@guardia.com",
+        "submittedAt": "2025-07-24T08:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "5 (Muy Seguro)"
+            },
+            {
+                "questionId": "q-202",
+                "value": "Se recomienda instalar una cámara adicional en el bloque C."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-013",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-08-31T14:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": []
+            }
+        ]
+    },
+    {
+        "responseId": "resp-014",
+        "surveyId": "survey-002",
+        "userEmail": "admin@admin.com",
+        "submittedAt": "2025-07-25T17:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-201",
+                "value": "5 (Muy Seguro)"
+            },
+            {
+                "questionId": "q-202",
+                "value": "Revisar protocolo de ingreso de visitas."
+            }
+        ]
+    },
+    {
+        "responseId": "resp-015",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-09-01T11:00:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Muy Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Parque para mascotas"
+                ]
+            }
+        ]
+    },
+    {
+        "responseId": "resp-016",
+        "surveyId": "survey-001",
+        "userEmail": "cliente@cliente.com",
+        "submittedAt": "2025-09-01T12:30:00Z",
+        "answers": [
+            {
+                "questionId": "q-001",
+                "value": "Satisfecho"
+            },
+            {
+                "questionId": "q-002",
+                "value": [
+                    "Gimnasio más equipado"
+                ]
+            }
+        ]
     }
 ]

@@ -1,5 +1,5 @@
 // src/services/surveyApi.ts
-import { Survey } from "@/types/survey";
+import { Survey, SurveyResults } from "@/types/survey";
 
 const API_BASE_URL = '/api/surveys';
 
@@ -39,6 +39,14 @@ export const updateSurvey = async (id: string, surveyData: Partial<Survey>): Pro
     });
     if (!response.ok) {
         throw new Error('Error al actualizar la encuesta');
+    }
+    return response.json();
+};
+
+export const getSurveyResults = async (id: string, signal?: AbortSignal): Promise<SurveyResults> => {
+    const response = await fetch(`${API_BASE_URL}/${id}/results`, { signal });
+    if (!response.ok) {
+        throw new Error('Error al obtener los resultados de la encuesta');
     }
     return response.json();
 };
