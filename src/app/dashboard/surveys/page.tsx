@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import { Survey, SurveyStatus } from '@/types/survey';
-import { getSurveys } from '@/services/surveyApi'; // <-- 1. Usamos el servicio de la API
+import { getSurveys, updateSurvey } from '@/services/surveyApi'; // <-- 1. Usamos el servicio de la API
 
 // --- (Los styled-components se mantienen exactamente igual) ---
 const SurveysContainer = styled.div`
@@ -96,6 +96,14 @@ const ActionButton = styled.button`
   }
 `;
 
+const CloseButton = styled(ActionButton)`
+  border-color: ${({ theme }) => theme.colors.danger};
+  color: ${({ theme }) => theme.colors.danger};
+  &:hover {
+    background-color: #ffebee; // Un rojo muy claro
+  }
+`;
+
 const StatusBadge = styled.span<{ status: SurveyStatus }>`
   padding: 4px 8px;
   border-radius: 12px;
@@ -148,6 +156,24 @@ export default function SurveysPage() {
     router.push('/dashboard/surveys/new');
   };
 
+  const handleCloseSurvey = async (surveyId: string) => {
+    if (window.confirm('¿Estás seguro de que quieres cerrar esta encuesta? No se podrá volver a abrir.')) {
+      try {
+        await updateSurvey(surveyId, { status: 'closed' });
+        // Actualizamos el estado local para que el cambio se vea al instante
+        setSurveys(prevSurveys =>
+          prevSurveys.map(s =>
+            s.id === surveyId ? { ...s, status: 'closed' } : s
+          )
+        );
+        alert('Encuesta cerrada con éxito.');
+      } catch (error) {
+        console.error('Error al cerrar la encuesta:', error);
+        alert('No se pudo cerrar la encuesta.');
+      }
+    }
+  };
+
   // 4. Mostramos un mensaje de carga mientras se obtienen los datos
   if (isLoading) {
     return <div>Cargando encuestas...</div>;
@@ -173,6 +199,10 @@ export default function SurveysPage() {
               {survey.status !== 'closed' && <ActionButton onClick={() => router.push(`/dashboard/surveys/${survey.id}`)}>
                 Editar
               </ActionButton>}
+              {survey.status === 'active' &&
+                <CloseButton onClick={() => handleCloseSurvey(survey.id)}>
+                  Cerrar
+                </CloseButton>}
             </CardActions>
           </SurveyCard>
         ))}
