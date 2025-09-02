@@ -159,7 +159,9 @@ export default function SurveysPage() {
             <CardDescription>{survey.description}</CardDescription>
             <CardActions>
               {survey.status !== 'draft' && <ActionButton>Ver Resultados</ActionButton>}
-              {survey.status !== 'closed' && <ActionButton>Editar</ActionButton>}
+              {survey.status !== 'closed' && <ActionButton onClick={() => router.push(`/dashboard/surveys/${survey.id}`)}>
+                Editar
+              </ActionButton>}
             </CardActions>
           </SurveyCard>
         ))}

@@ -1,3 +1,4 @@
+// src/services/surveyApi.ts
 import { Survey } from "@/types/survey";
 
 const API_BASE_URL = '/api/surveys';
@@ -13,9 +14,7 @@ export const getSurveys = async (): Promise<Survey[]> => {
 export const createSurvey = async (survey: Survey): Promise<Survey> => {
     const response = await fetch(API_BASE_URL, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(survey),
     });
     if (!response.ok) {
@@ -24,4 +23,22 @@ export const createSurvey = async (survey: Survey): Promise<Survey> => {
     return response.json();
 };
 
-// Podríamos añadir updateSurvey y deleteSurvey aquí en el futuro
+export const getSurveyById = async (id: string): Promise<Survey> => {
+    const response = await fetch(`${API_BASE_URL}/${id}`);
+    if (!response.ok) {
+        throw new Error('Error al obtener la encuesta');
+    }
+    return response.json();
+};
+
+export const updateSurvey = async (id: string, surveyData: Partial<Survey>): Promise<Survey> => {
+    const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(surveyData),
+    });
+    if (!response.ok) {
+        throw new Error('Error al actualizar la encuesta');
+    }
+    return response.json();
+};
