@@ -3,13 +3,13 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import styled from 'styled-components';
-import { Survey } from '@/types/survey';
+import { Survey, SurveyStatus } from '@/types/survey';
 import { QuestionBuilder } from './QuestionBuilder';
 import { createSurvey, getSurveyById, updateSurvey } from '@/services/surveyApi';
 
 type QuestionState = Survey['questions'][0];
 
-// --- (Copia y pega todos tus styled-components aquí) ---
+// --- (Todos tus styled-components van aquí) ---
 const FormContainer = styled.div`
   background-color: #ffffff;
   padding: 32px;
@@ -40,6 +40,17 @@ const Textarea = styled.textarea`
   font-size: 16px;
   min-height: 100px;
   resize: vertical;
+`;
+const CheckboxGroup = styled.div`
+  display: flex;
+  gap: 24px;
+  margin-top: 8px;
+`;
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 `;
 const AddQuestionButton = styled.button`
   width: 100%;
@@ -72,7 +83,6 @@ const SaveButton = styled.button<{ $primary?: boolean }>`
   color: ${({ theme, $primary }) => ($primary ? theme.colors.primaryBlack : theme.colors.text)};
 `;
 
-
 export default function SurveyFormPage() {
     const router = useRouter();
     const params = useParams();
@@ -82,51 +92,56 @@ export default function SurveyFormPage() {
     const [formState, setFormState] = useState({
         title: '',
         description: '',
+        targetAudience: [] as string[],
         questions: [] as QuestionState[],
     });
     const [isLoading, setIsLoading] = useState(true);
+    const [initialStatus, setInitialStatus] = useState<SurveyStatus>('draft');
 
     useEffect(() => {
-        // 1. Creamos el AbortController para cancelar el fetch si es necesario
         const controller = new AbortController();
-
         if (surveyId === 'new') {
             setIsEditMode(false);
             setFormState({
                 title: '',
                 description: '',
+                targetAudience: [],
                 questions: [{ id: `q-${Date.now()}`, text: '', type: 'open_text', options: [] }],
             });
             setIsLoading(false);
         } else {
             setIsEditMode(true);
-            getSurveyById(surveyId, controller.signal) // 2. Pasamos el signal a la API
+            getSurveyById(surveyId, controller.signal)
                 .then(data => {
                     setFormState({
                         title: data.title,
                         description: data.description,
+                        targetAudience: data.targetAudience,
                         questions: data.questions,
                     });
-                })
-                .catch(err => {
-                    if (err.name !== 'AbortError') {
-                        console.error("Error al cargar la encuesta para editar:", err);
-                    }
+                    setInitialStatus(data.status);
                 })
                 .finally(() => setIsLoading(false));
         }
-
-        // 3. Devolvemos la función de limpieza para abortar el fetch
-        return () => {
-            controller.abort();
-        };
+        return () => controller.abort();
     }, [surveyId]);
 
     const handleInputChange = (field: 'title' | 'description', value: string) => {
         setFormState(prevState => ({ ...prevState, [field]: value }));
     };
 
-    // --- 1. AÑADIMOS LAS FUNCIONES PARA MANEJAR LAS PREGUNTAS ---
+    const handleAudienceChange = (role: string) => {
+        setFormState(prevState => {
+            const newAudience = [...prevState.targetAudience];
+            if (newAudience.includes(role)) {
+                return { ...prevState, targetAudience: newAudience.filter(r => r !== role) };
+            } else {
+                return { ...prevState, targetAudience: [...newAudience, role] };
+            }
+        });
+    };
+
+    // --- FUNCIONES COMPLETAS PARA MANEJAR PREGUNTAS ---
     const addQuestion = () => {
         setFormState(prevState => ({
             ...prevState,
@@ -151,11 +166,15 @@ export default function SurveyFormPage() {
         }));
     };
 
-    const handleSave = async () => {
-        const { title, description, questions } = formState;
+    const handleSave = async (newStatus?: SurveyStatus) => {
+        const { title, description, questions, targetAudience } = formState;
         try {
             if (isEditMode) {
-                await updateSurvey(surveyId, { title, description, questions });
+                const updatedData: Partial<Survey> = { title, description, questions, targetAudience };
+                if (newStatus) {
+                    updatedData.status = newStatus;
+                }
+                await updateSurvey(surveyId, updatedData);
                 alert('Encuesta actualizada!');
             } else {
                 const newSurvey: Survey = {
@@ -163,9 +182,9 @@ export default function SurveyFormPage() {
                     title,
                     description,
                     questions,
-                    status: 'draft',
+                    targetAudience,
+                    status: newStatus || 'draft',
                     createdAt: new Date().toISOString(),
-                    targetAudience: [],
                 };
                 await createSurvey(newSurvey);
                 alert('Encuesta creada!');
@@ -190,9 +209,20 @@ export default function SurveyFormPage() {
                 <Label htmlFor="description">Descripción</Label>
                 <Textarea id="description" value={formState.description} onChange={(e) => handleInputChange('description', e.target.value)} />
             </FormGroup>
+            <FormGroup>
+                <Label>Dirigido a:</Label>
+                <CheckboxGroup>
+                    <CheckboxLabel>
+                        <input type="checkbox" value="resident" checked={formState.targetAudience.includes('resident')} onChange={() => handleAudienceChange('resident')} /> Residentes
+                    </CheckboxLabel>
+                    <CheckboxLabel>
+                        <input type="checkbox" value="guard" checked={formState.targetAudience.includes('guard')} onChange={() => handleAudienceChange('guard')} /> Guardias
+                    </CheckboxLabel>
+                </CheckboxGroup>
+            </FormGroup>
 
             {formState.questions.map((question, index) => (
-                // --- 2. PASAMOS LAS PROPS CORRECTAS AL COMPONENTE ---
+                // --- PROPS CORREGIDAS ---
                 <QuestionBuilder
                     key={question.id}
                     question={question}
@@ -205,9 +235,17 @@ export default function SurveyFormPage() {
             <AddQuestionButton onClick={addQuestion}>+ Añadir Pregunta</AddQuestionButton>
 
             <ActionsContainer>
-                <SaveButton $primary onClick={handleSave}>
-                    {isEditMode ? 'Guardar Cambios' : 'Guardar Encuesta'}
-                </SaveButton>
+                {isEditMode ? (
+                    <>
+                        <SaveButton onClick={() => handleSave()}>Guardar Cambios</SaveButton>
+                        {initialStatus === 'draft' && <SaveButton $primary onClick={() => handleSave('active')}>Guardar y Activar</SaveButton>}
+                    </>
+                ) : (
+                    <>
+                        <SaveButton onClick={() => handleSave('draft')}>Guardar Borrador</SaveButton>
+                        <SaveButton $primary onClick={() => handleSave('active')}>Guardar y Activar</SaveButton>
+                    </>
+                )}
             </ActionsContainer>
         </FormContainer>
     );
