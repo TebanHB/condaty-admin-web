@@ -118,19 +118,30 @@ export default function SurveysPage() {
 
   // 3. Usamos useEffect para cargar los datos desde nuestra API al montar el componente
   useEffect(() => {
+    // 1. Creamos un AbortController para poder cancelar el fetch
+    const controller = new AbortController();
+
     const fetchSurveys = async () => {
       try {
-        const data = await getSurveys();
+        // Pasamos el "signal" del controller al getSurveys (necesitaremos actualizar esa función)
+        const data = await getSurveys(controller.signal);
         setSurveys(data);
-      } catch (error) {
-        console.error("Failed to fetch surveys:", error);
-        // Aquí podrías mostrar un mensaje de error al usuario
+      } catch (error: any) {
+        // Si el error es por abortar, no lo mostramos en consola
+        if (error.name !== 'AbortError') {
+          console.error("Failed to fetch surveys:", error);
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchSurveys();
+
+    // 2. Devolvemos una función de limpieza que aborta el fetch
+    return () => {
+      controller.abort();
+    };
   }, []); // El array vacío asegura que solo se ejecute una vez
 
   const handleCreateSurvey = () => {

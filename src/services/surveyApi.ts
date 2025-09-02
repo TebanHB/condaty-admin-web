@@ -3,8 +3,8 @@ import { Survey } from "@/types/survey";
 
 const API_BASE_URL = '/api/surveys';
 
-export const getSurveys = async (): Promise<Survey[]> => {
-    const response = await fetch(API_BASE_URL);
+export const getSurveys = async (signal?: AbortSignal): Promise<Survey[]> => {
+    const response = await fetch(API_BASE_URL, { signal });
     if (!response.ok) {
         throw new Error('Error al obtener las encuestas');
     }
@@ -23,8 +23,8 @@ export const createSurvey = async (survey: Survey): Promise<Survey> => {
     return response.json();
 };
 
-export const getSurveyById = async (id: string): Promise<Survey> => {
-    const response = await fetch(`${API_BASE_URL}/${id}`);
+export const getSurveyById = async (id: string, signal?: AbortSignal): Promise<Survey> => {
+    const response = await fetch(`${API_BASE_URL}/${id}`, { signal });
     if (!response.ok) {
         throw new Error('Error al obtener la encuesta');
     }

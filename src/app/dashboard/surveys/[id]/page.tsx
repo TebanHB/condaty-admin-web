@@ -87,6 +87,9 @@ export default function SurveyFormPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
+        // 1. Creamos el AbortController para cancelar el fetch si es necesario
+        const controller = new AbortController();
+
         if (surveyId === 'new') {
             setIsEditMode(false);
             setFormState({
@@ -97,7 +100,7 @@ export default function SurveyFormPage() {
             setIsLoading(false);
         } else {
             setIsEditMode(true);
-            getSurveyById(surveyId)
+            getSurveyById(surveyId, controller.signal) // 2. Pasamos el signal a la API
                 .then(data => {
                     setFormState({
                         title: data.title,
@@ -105,8 +108,18 @@ export default function SurveyFormPage() {
                         questions: data.questions,
                     });
                 })
+                .catch(err => {
+                    if (err.name !== 'AbortError') {
+                        console.error("Error al cargar la encuesta para editar:", err);
+                    }
+                })
                 .finally(() => setIsLoading(false));
         }
+
+        // 3. Devolvemos la función de limpieza para abortar el fetch
+        return () => {
+            controller.abort();
+        };
     }, [surveyId]);
 
     const handleInputChange = (field: 'title' | 'description', value: string) => {
