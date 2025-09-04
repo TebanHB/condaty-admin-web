@@ -1,3 +1,4 @@
+// src/app/api/surveys/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -5,12 +6,17 @@ import { Survey } from '@/types/survey';
 
 const surveysFilePath = path.join(process.cwd(), 'src/lib/fakeData/surveys.json');
 
-// --- GET (obtener una encuesta por ID) ---
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+// Tipamos params como Promise y lo resolvemos dentro
+type Params = { id: string };
+
+// --- GET ---
+export async function GET(request: Request, ctx: { params: Promise<Params> }) {
     try {
+        const { id } = await ctx.params;
+
         const fileContents = await fs.readFile(surveysFilePath, 'utf8');
         const surveys: Survey[] = JSON.parse(fileContents);
-        const survey = surveys.find(s => s.id === params.id);
+        const survey = surveys.find(s => s.id === id);
 
         if (!survey) {
             return NextResponse.json({ message: 'Encuesta no encontrada' }, { status: 404 });
@@ -22,21 +28,21 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
 }
 
-// --- PUT (actualizar una encuesta) ---
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+// --- PUT ---
+export async function PUT(request: Request, ctx: { params: Promise<Params> }) {
     try {
+        const { id } = await ctx.params;
+
         const updatedSurveyData: Partial<Survey> = await request.json();
         const fileContents = await fs.readFile(surveysFilePath, 'utf8');
-        let surveys: Survey[] = JSON.parse(fileContents);
+        const surveys: Survey[] = JSON.parse(fileContents);
 
-        const surveyIndex = surveys.findIndex(s => s.id === params.id);
+        const surveyIndex = surveys.findIndex(s => s.id === id);
         if (surveyIndex === -1) {
             return NextResponse.json({ message: 'Encuesta no encontrada' }, { status: 404 });
         }
 
-        // Actualizamos la encuesta con los nuevos datos
         surveys[surveyIndex] = { ...surveys[surveyIndex], ...updatedSurveyData };
-
         await fs.writeFile(surveysFilePath, JSON.stringify(surveys, null, 2));
 
         return NextResponse.json(surveys[surveyIndex]);
