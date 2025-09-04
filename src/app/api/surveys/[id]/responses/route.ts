@@ -6,13 +6,17 @@ import path from 'path';
 import { SurveyResponse } from '@/types/survey';
 import jwt from 'jsonwebtoken';
 
-// Rutas a nuestros archivos de datos falsos
 const responsesFilePath = path.join(process.cwd(), 'src/lib/fakeData/responses.json');
 
-// La función POST se encarga de recibir y guardar nuevos datos
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+    request: NextRequest,
+    context: { params: Promise<{ id: string }> }
+) {
     try {
-        // --- 1. Verificar la autenticación del usuario ---
+        // --- Obtenemos el 'id' usando await ---
+        const { id } = await context.params;
+
+        // El resto de la lógica de autenticación y manejo de datos sigue igual
         const authHeader = request.headers.get('Authorization');
         const token = authHeader?.split(' ')[1];
 
@@ -30,7 +34,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
             return NextResponse.json({ message: 'Token inválido' }, { status: 401 });
         }
 
-        // --- 2. Leer los datos enviados desde la app móvil ---
         const body = await request.json();
         const { answers } = body;
 
@@ -38,25 +41,21 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
             return NextResponse.json({ message: 'Las respuestas son requeridas' }, { status: 400 });
         }
 
-        // --- 3. Leer las respuestas existentes ---
         const responsesFile = await fs.readFile(responsesFilePath, 'utf8');
         const allResponses: SurveyResponse[] = JSON.parse(responsesFile);
 
-        // --- 4. Crear el nuevo objeto de respuesta ---
         const newResponse: SurveyResponse = {
-            responseId: `resp-${Date.now()}`, // Generamos un ID único simple
-            surveyId: params.id, // El ID de la encuesta viene de la URL
-            userEmail: decodedToken.email, // El email del usuario viene del token
-            submittedAt: new Date().toISOString(), // La fecha y hora actual
-            answers: answers, // Las respuestas del body
+            responseId: `resp-${Date.now()}`,
+            surveyId: id,
+            userEmail: decodedToken.email,
+            submittedAt: new Date().toISOString(),
+            answers: answers,
         };
 
-        // --- 5. Añadir la nueva respuesta y guardar el archivo ---
         allResponses.push(newResponse);
         await fs.writeFile(responsesFilePath, JSON.stringify(allResponses, null, 4));
 
-        // --- 6. Devolver la respuesta creada con éxito ---
-        return NextResponse.json(newResponse, { status: 201 }); // 201 = Created
+        return NextResponse.json(newResponse, { status: 201 });
 
     } catch (error) {
         console.error('Error al guardar la respuesta:', error);
