@@ -102,14 +102,14 @@ export default function LoginPage() {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="admin@admin.com"
+          placeholder="Correo electrónico"
           required
         />
         <Input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Contraseña (12345678)"
+          placeholder="Contraseña"
           required
         />
         <Button type="submit">Entrar</Button>
