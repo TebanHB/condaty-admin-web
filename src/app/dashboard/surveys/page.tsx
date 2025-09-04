@@ -19,7 +19,7 @@ const ResponseBadge = styled.span`
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
-    flex-shrink: 0; /* Evita que el badge de respuestas se encoja */
+    flex-shrink: 0;
   `;
 
 const PageHeader = styled.div`
@@ -72,17 +72,17 @@ const SurveyCard = styled.div<{ status: SurveyStatus }>`
 
 const CardHeader = styled.div`
   display: flex;
-  align-items: center; /* Centra todo verticalmente */
-  gap: 8px; /* Espacio entre todos los elementos del header */
+  align-items: center;
+  gap: 8px;
   width: 100%;
 `;
 
 const TitleAndResponse = styled.div`
     display: flex;
-    align-items: center; /* Alinea verticalmente el título y el badge de respuestas */
-    gap: 8px; /* Espacio entre el título y el badge de respuestas */
-    flex-grow: 1; /* Permite que este contenedor ocupe el espacio disponible */
-    min-width: 0; /* Permite que el contenido se encoja si es necesario */
+    align-items: center;
+    gap: 8px;
+    flex-grow: 1;
+    min-width: 0;
   `;
 
 const CardTitle = styled.h3`
@@ -126,7 +126,7 @@ const CloseButton = styled(ActionButton)`
     border-color: ${({ theme }) => theme.colors.danger};
     color: ${({ theme }) => theme.colors.danger};
     &:hover {
-      background-color: #ffebee; // Un rojo muy claro
+      background-color: #ffebee;
     }
   `;
 
@@ -141,7 +141,7 @@ const StatusBadge = styled.span<{ status: SurveyStatus }>`
     if (status === 'closed') return theme.colors.danger;
     return theme.colors.secondaryBlack;
   }};
-    flex-shrink: 0; /* Evita que el badge de estado se encoja */
+    flex-shrink: 0;
   `;
 
 export default function SurveysPage() {
@@ -155,8 +155,8 @@ export default function SurveysPage() {
       try {
         const data = await getSurveys(controller.signal);
         setSurveys(data);
-      } catch (error: any) {
-        if (error.name !== 'AbortError') {
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
           console.error("Failed to fetch surveys:", error);
         }
       } finally {

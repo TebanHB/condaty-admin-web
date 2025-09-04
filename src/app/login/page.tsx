@@ -83,7 +83,11 @@ export default function LoginPage() {
     try {
       await login(email, password);
     } catch (err) {
-      setError('Credenciales incorrectas. Inténtalo de nuevo.');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Credenciales incorrectas. Inténtalo de nuevo.');
+      }
     }
   };
 

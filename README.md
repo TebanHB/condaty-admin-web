@@ -31,7 +31,9 @@ Para mantener el enfoque de esta versión, las siguientes funcionalidades no for
 -   **Permisos Granulares**: El manejo de permisos se limita a roles generales, sin un sistema de permisos detallado por acción.
 -   **Responder encuestas web**: No se incluye la contestacion de las encuestas en la pagina web, solo la creacion y edificion de encuestas 
 -   **Trazabilidad visible**: No se puede ver en los resultados las respuestas de los usuarios, pero si se encuentra en el archivo .json
-
+-   **Despliegue e integracion continua**: No se cuenta con servicios como Jenkings u otros para realizar despliegues continuos
+-   **Dockerizacion**: No cuenta con imagen docker
+-   **Personalizacion**: La app web no cuenta con personalizacion de tema, Ej: DarkMode
 ## A Considerar
 
 ### Configuración del Entorno
@@ -50,6 +52,8 @@ Es crucial configurar las variables de entorno para el correcto funcionamiento d
 Primero, ejecuta el servidor de desarrollo:
 
 ```bash
+npm install
+#Luego
 npm run dev
 # o
 yarn dev
@@ -59,6 +63,8 @@ pnpm dev
 
 ## Despliegue productivo
 ```bash
+npm install
+#luego
 npm run build
 
 npm run start

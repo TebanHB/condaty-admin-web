@@ -5,6 +5,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { SurveyResponse } from '@/types/survey';
 import jwt from 'jsonwebtoken';
+import { JwtPayload } from '@/types/jwt';
 
 const responsesFilePath = path.join(process.cwd(), 'src/lib/fakeData/responses.json');
 
@@ -27,10 +28,11 @@ export async function POST(
         const JWT_SECRET = process.env.JWT_SECRET;
         if (!JWT_SECRET) throw new Error('JWT_SECRET no está configurado');
 
-        let decodedToken: any;
+        let decodedToken: JwtPayload;
         try {
-            decodedToken = jwt.verify(token, JWT_SECRET);
+            decodedToken = jwt.verify(token, JWT_SECRET) as JwtPayload;
         } catch (error) {
+            console.error("Invalid token error:", error);
             return NextResponse.json({ message: 'Token inválido' }, { status: 401 });
         }
 

@@ -4,6 +4,7 @@ import path from 'path';
 import { Survey } from '@/types/survey';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
+import { JwtPayload } from '@/types/jwt';
 
 // Construimos la ruta al archivo JSON
 const surveysFilePath = path.join(process.cwd(), 'src/lib/fakeData/surveys.json');
@@ -32,10 +33,11 @@ export async function GET(request: NextRequest) {
         const JWT_SECRET = process.env.JWT_SECRET;
         if (!JWT_SECRET) throw new Error('JWT_SECRET no está configurado');
 
-        let decodedToken: any;
+        let decodedToken: JwtPayload;
         try {
-            decodedToken = jwt.verify(tokenValue, JWT_SECRET);
+            decodedToken = jwt.verify(tokenValue, JWT_SECRET) as JwtPayload;
         } catch (error) {
+            console.error("Invalid token error:", error);
             return NextResponse.json({ message: 'Token inválido' }, { status: 401 });
         }
 
