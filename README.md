@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Condaty Admin Web
 
-## Getting Started
+Este es un proyecto de panel de administración construido con [Next.js](https://nextjs.org), diseñado para la gestión de encuestas dentro del ecosistema de Condaty.
 
-First, run the development server:
+## Alcance del Proyecto
+
+### Funcionalidades Incluidas
+
+-   **Autenticación Segura**: Implementación de un sistema de autenticación basado en JWT (JSON Web Tokens) con roles, utilizando cookies `HttpOnly` para mayor seguridad en el entorno web.
+-   **Gestión de Encuestas**:
+    -   **Creación**: Los administradores pueden crear nuevas encuestas.
+    -   **Estados de Encuesta**: Las encuestas pueden tener los siguientes estados:
+        -   `draft`: Borrador, no visible para los usuarios.
+        -   `active`: Activa y disponible para ser respondida.
+        -   `closed`: Cerrada, ya no acepta más respuestas.
+    -   **Edición**: Modificación de encuestas existentes.
+    -   **Cierre**: Posibilidad de cerrar una encuesta activa.
+-   **Respuestas de Encuestas**:
+    -   Los usuarios pueden responder a las encuestas activas.
+    -   Visualización de resultados con gráficas para un análisis óptimo.
+
+### Funcionalidades Excluidas
+
+Para mantener el enfoque de esta versión, las siguientes funcionalidades no forman parte del alcance actual:
+
+-   **Autenticación de Clientes/Guardias**: El login en esta plataforma está restringido a roles administrativos.
+-   **Notificaciones en Tiempo Real**: No se implementarán notificaciones push ni WebSockets.
+-   **Exportación de Datos**: No se incluye la funcionalidad para exportar resultados de encuestas a PDF u otros formatos.
+-   **Bases de Datos Externas**: El proyecto no se conectará a bases de datos SQL o NoSQL; utiliza datos locales o simulados.
+-   **Interceptores de Peticiones**: No se configurarán interceptores automáticos para inyectar cookies en todas las peticiones salientes.
+-   **Permisos Granulares**: El manejo de permisos se limita a roles generales, sin un sistema de permisos detallado por acción.
+
+## A Considerar
+
+### Configuración del Entorno
+
+Es crucial configurar las variables de entorno para el correcto funcionamiento de la autenticación.
+
+1.  Crea un archivo `.env.local` en la raíz del proyecto.
+2.  Añade la siguiente variable para definir el secreto del token JWT:
+
+    ```env
+    JWT_SECRET="tu_secreto_super_secreto_y_largo_aqui"
+    ```
+
+## Primeros Pasos (Getting Started)
+
+Primero, ejecuta el servidor de desarrollo:
 
 ```bash
 npm run dev
-# or
+# o
 yarn dev
-# or
+# o
 pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
