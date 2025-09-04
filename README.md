@@ -1,6 +1,11 @@
 # Condaty Admin Web
 
 Este es un proyecto de panel de administración construido con [Next.js](https://nextjs.org), diseñado para la gestión de encuestas dentro del ecosistema de Condaty.
+## Demo Temporal
+
+Puedes probar una versión en vivo de la aplicación en el siguiente enlace. Ten en cuenta que esta URL es temporal y puede cambiar.
+
+[Demo](https://74f128f1c568.ngrok-free.app/)
 
 ## Alcance del Proyecto
 
