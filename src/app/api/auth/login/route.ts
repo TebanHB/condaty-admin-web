@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
     // 4. Devolver la respuesta exitosa y establecer la cookie en el navegador
     const response = NextResponse.json(
-        { role: user.role, email: user.email },
+        { role: user.role, email: user.email, token: token },
         { status: 200 }
     );
 
