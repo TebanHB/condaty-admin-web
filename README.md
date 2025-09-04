@@ -51,6 +51,8 @@ Para mantener el enfoque de esta versión, las siguientes funcionalidades no for
 -   **Despliegue e integracion continua**: No se cuenta con servicios como Jenkings u otros para realizar despliegues continuos
 -   **Dockerizacion**: No cuenta con imagen docker
 -   **Personalizacion**: La app web no cuenta con personalizacion de tema, Ej: DarkMode
+-   **SSL**: No se cuenta con certificado SSL por lo tanto no hay peticiones HTTPS
+-   **Cifrado RSA**: No se cuenta con metodos de cifrar y decifrar datos sensibles como la contraseña mediante las peticiones
 ## A Considerar
 
 ### Configuración del Entorno
