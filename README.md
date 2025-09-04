@@ -7,6 +7,18 @@ Puedes probar una versión en vivo de la aplicación en el siguiente enlace. Ten
 
 [Demo](https://74f128f1c568.ngrok-free.app/)
 
+### Credenciales de Prueba
+
+Utiliza las siguientes cuentas para acceder a la demo:
+
+```json
+[
+    { "email": "admin@admin.com", "password": "12345678", "role": "admin" },
+    { "email": "guardia@guardia.com", "password": "12345678", "role": "guard" },
+    { "email": "cliente@cliente.com", "password": "12345678", "role": "resident" }
+]
+```
+
 ## Alcance del Proyecto
 
 ### Funcionalidades Incluidas
