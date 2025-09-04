@@ -1,37 +1,80 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { Survey } from '@/types/survey';
+import jwt from 'jsonwebtoken';
+import { cookies } from 'next/headers';
 
 // Construimos la ruta al archivo JSON
 const surveysFilePath = path.join(process.cwd(), 'src/lib/fakeData/surveys.json');
 const responsesFilePath = path.join(process.cwd(), 'src/lib/fakeData/responses.json');
 
 // --- Función GET: Obtener todas las encuestas ---
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
-        // 1. Leemos ambos archivos en paralelo para más eficiencia
+        // --- Bloque de Autenticación (sin cambios) ---
+        let tokenValue: string | undefined;
+
+        const authHeader = request.headers.get('Authorization');
+        if (authHeader?.startsWith('Bearer ')) {
+            tokenValue = authHeader.split(' ')[1];
+        }
+
+        if (!tokenValue) {
+            const tokenCookie = (await cookies()).get('authToken');
+            tokenValue = tokenCookie?.value;
+        }
+
+        if (!tokenValue) {
+            return NextResponse.json({ message: 'No autenticado' }, { status: 401 });
+        }
+
+        const JWT_SECRET = process.env.JWT_SECRET;
+        if (!JWT_SECRET) throw new Error('JWT_SECRET no está configurado');
+
+        let decodedToken: any;
+        try {
+            decodedToken = jwt.verify(tokenValue, JWT_SECRET);
+        } catch (error) {
+            return NextResponse.json({ message: 'Token inválido' }, { status: 401 });
+        }
+
+        const userRole = decodedToken.role;
+
+        // --- Obtención de datos (sin cambios) ---
         const [surveysFile, responsesFile] = await Promise.all([
             fs.readFile(surveysFilePath, 'utf8'),
             fs.readFile(responsesFilePath, 'utf8')
         ]);
 
-        const surveys: Survey[] = JSON.parse(surveysFile);
+        const allSurveys: Survey[] = JSON.parse(surveysFile);
         const responses: { surveyId: string }[] = JSON.parse(responsesFile);
 
-        // 2. Creamos un mapa para contar las respuestas de cada encuesta
         const responseCounts = responses.reduce((acc, response) => {
             acc[response.surveyId] = (acc[response.surveyId] || 0) + 1;
             return acc;
         }, {} as Record<string, number>);
 
-        // 3. Añadimos el conteo a cada encuesta
-        const surveysWithCounts = surveys.map(survey => ({
+        const surveysWithCounts = allSurveys.map(survey => ({
             ...survey,
             responseCount: responseCounts[survey.id] || 0
         }));
 
-        return NextResponse.json(surveysWithCounts);
+        // --- LÓGICA DE FILTRADO FINAL ---
+        // Si el usuario es un administrador, devolvemos TODAS las encuestas.
+        if (userRole === 'admin') {
+            return NextResponse.json(surveysWithCounts);
+        }
+
+        // Si no es admin, aplicamos los filtros para usuarios regulares.
+        const filteredForUser = surveysWithCounts.filter(survey =>
+            // 1. La encuesta no debe ser un borrador.
+            survey.status !== 'draft' &&
+            // 2. Debe ser para todos o para el rol específico del usuario.
+            (!survey.targetAudience || survey.targetAudience.length === 0 || survey.targetAudience.includes(userRole))
+        );
+
+        return NextResponse.json(filteredForUser);
 
     } catch (error) {
         console.error('Error al leer los datos:', error);
